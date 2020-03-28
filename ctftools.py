@@ -1,8 +1,11 @@
 from crypto_tools import CesarCypherSolver
+from crypto_tools import VigenereCypherSolver
 
 def main():
-    text = ""
-    solution = CesarCypherSolver.frequency_analise_hack(text)
+    text = "ATTACKATDAWN"
+    key = "LEMON"
+    solution = VigenereCypherSolver.encode(text, key)
+    solution = VigenereCypherSolver.decode(solution, key)
     print(solution)
 
 

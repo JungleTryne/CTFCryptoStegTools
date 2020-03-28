@@ -2,7 +2,38 @@ import string
 from crypto_constants import LETTER_FREQUENCY
 
 
+def lower_arguments(func):
+    def wrapper(*args, **kwargs):
+        new_args = []
+        for i in range(len(args)):
+            if isinstance(args[i], str):
+                new_args.append(args[i].lower())
+            else:
+                new_args.append(args[i])
+        args = tuple(new_args)
+        for key in kwargs:
+            if isinstance(kwargs[key], str):
+                kwargs[key] = kwargs[key].lower()
+        return func(*args, **kwargs)
+
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    wrapper.__module__ = func.__module__
+
+    return wrapper
+
+
 class CesarCypherSolver:
+    @staticmethod
+    @lower_arguments
+    def encode(message: str, key: int):
+        return CesarCypherSolver.rotate_text(message, key)
+
+    @staticmethod
+    @lower_arguments
+    def decode(message: str, key: int):
+        return CesarCypherSolver.rotate_text(message, 26-key)
+
     @staticmethod
     def get_delta(message_counter: dict) -> int:
         delta = 0
@@ -32,6 +63,7 @@ class CesarCypherSolver:
         return solution
 
     @staticmethod
+    @lower_arguments
     def frequency_analise_hack(message: str) -> str:
         """
         Метод расшифровки сообщения методом частотного анализа
@@ -40,7 +72,6 @@ class CesarCypherSolver:
         """
         if not message:
             return ""
-        message = message.lower()
         counter = dict()
         for char in string.ascii_lowercase:
             counter[char] = 0
@@ -69,4 +100,61 @@ class CesarCypherSolver:
 
 
 class VigenereCypherSolver:
-    pass
+    @staticmethod
+    def encode_symbol(char: str, key_char: str):
+        return chr(
+            ((ord(char) - ord('a') +
+              ord(key_char) - ord('a')) % 26) + ord('a')
+        )
+
+    @staticmethod
+    def decode_symbol(char: str, key_char: str):
+        return chr(
+            ((ord(char) - ord('a') -
+              ord(key_char) + ord('a')) % 26) + ord('a')
+        )
+
+    @staticmethod
+    def enlarge_key(message: str, key: str) -> str:
+        """
+        Возвращает ключ той же длины, что и сообщение, путем "копипасты"
+        :param message: сообщение
+        :param key: ключ
+        :return: удлиннёный ключ
+        """
+        longer_key = key
+        pointer = 0
+        while len(longer_key) < len(message):
+            longer_key += key[pointer]
+            pointer = (pointer + 1) % len(key)
+        return longer_key
+
+    @staticmethod
+    @lower_arguments
+    def encode(message: str, key: str) -> str:
+        """
+        Метод шифрования сообщения методом Вижера
+        :param message: сообщения для шифровки
+        :param key: ключ шифрования
+        :return: зашифрованное сообщение
+        """
+        longer_key = VigenereCypherSolver.enlarge_key(message, key)
+        encrypted = ''
+        for i in range(len(message)):
+            encrypted += VigenereCypherSolver.encode_symbol(message[i], longer_key[i])
+        return encrypted
+
+    @staticmethod
+    @lower_arguments
+    def decode(message: str, key: str) -> str:
+        """
+        Функция декодирования сообщения
+        :param message: зашифрованное сообщение
+        :param key: ключ шифрования
+        :return: расшифрованное сообщение
+        """
+        longer_key = VigenereCypherSolver.enlarge_key(message, key)
+        decrypted = ''
+        for i in range(len(message)):
+            decrypted += VigenereCypherSolver.decode_symbol(message[i], longer_key[i])
+        return decrypted
