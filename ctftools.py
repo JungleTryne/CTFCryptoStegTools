@@ -1,11 +1,11 @@
-from crypto_tools import CesarCypherSolver
-from crypto_tools import VigenereCypherSolver
+from crypto_tools import CesarCypherTools
+from crypto_tools import VigenereCypherTools
+from crypto_tools import VernamCypherTools
+
 
 def main():
-    text = "ATTACKATDAWN"
-    key = "LEMON"
-    solution = VigenereCypherSolver.encode(text, key)
-    solution = VigenereCypherSolver.decode(solution, key)
+    solution = VernamCypherTools.encode('hello world')
+    solution = VernamCypherTools.decode(*solution)
     print(solution)
 
 

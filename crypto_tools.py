@@ -1,6 +1,8 @@
 import string
 from crypto_constants import LETTER_FREQUENCY
 
+from random import randint
+
 
 def lower_arguments(func):
     def wrapper(*args, **kwargs):
@@ -23,22 +25,22 @@ def lower_arguments(func):
     return wrapper
 
 
-class CesarCypherSolver:
+class CesarCypherTools:
     @staticmethod
     @lower_arguments
     def encode(message: str, key: int):
-        return CesarCypherSolver.rotate_text(message, key)
+        return CesarCypherTools.rotate_text(message, key)
 
     @staticmethod
     @lower_arguments
     def decode(message: str, key: int):
-        return CesarCypherSolver.rotate_text(message, 26-key)
+        return CesarCypherTools.rotate_text(message, 26 - key)
 
     @staticmethod
     def get_delta(message_counter: dict) -> int:
         delta = 0
         for char in message_counter:
-            delta += (message_counter[char] - LETTER_FREQUENCY[char])**2
+            delta += (message_counter[char] - LETTER_FREQUENCY[char]) ** 2
         return delta
 
     @staticmethod
@@ -57,7 +59,7 @@ class CesarCypherSolver:
         solution = ''
         for char in message:
             if char in string.ascii_lowercase:
-                solution += chr(((ord(char)-97 + key) % 26) + 97)
+                solution += chr(((ord(char) - 97 + key) % 26) + 97)
             else:
                 solution += char
         return solution
@@ -86,20 +88,20 @@ class CesarCypherSolver:
             counter[key] /= total
             counter[key] *= 100
 
-        delta = CesarCypherSolver.get_delta(counter)
+        delta = CesarCypherTools.get_delta(counter)
         rotate_solution = 0
 
         for i in range(25):
-            CesarCypherSolver.rotate_counter(counter)
-            new_delta = CesarCypherSolver.get_delta(counter)
+            CesarCypherTools.rotate_counter(counter)
+            new_delta = CesarCypherTools.get_delta(counter)
             if new_delta < delta:
-                rotate_solution = i+1
+                rotate_solution = i + 1
                 delta = new_delta
 
-        return CesarCypherSolver.rotate_text(message, rotate_solution)
+        return CesarCypherTools.rotate_text(message, rotate_solution)
 
 
-class VigenereCypherSolver:
+class VigenereCypherTools:
     @staticmethod
     def encode_symbol(char: str, key_char: str):
         return chr(
@@ -138,10 +140,10 @@ class VigenereCypherSolver:
         :param key: ключ шифрования
         :return: зашифрованное сообщение
         """
-        longer_key = VigenereCypherSolver.enlarge_key(message, key)
+        longer_key = VigenereCypherTools.enlarge_key(message, key)
         encrypted = ''
         for i in range(len(message)):
-            encrypted += VigenereCypherSolver.encode_symbol(message[i], longer_key[i])
+            encrypted += VigenereCypherTools.encode_symbol(message[i], longer_key[i])
         return encrypted
 
     @staticmethod
@@ -153,8 +155,57 @@ class VigenereCypherSolver:
         :param key: ключ шифрования
         :return: расшифрованное сообщение
         """
-        longer_key = VigenereCypherSolver.enlarge_key(message, key)
+        longer_key = VigenereCypherTools.enlarge_key(message, key)
         decrypted = ''
         for i in range(len(message)):
-            decrypted += VigenereCypherSolver.decode_symbol(message[i], longer_key[i])
+            decrypted += VigenereCypherTools.decode_symbol(message[i], longer_key[i])
         return decrypted
+
+
+class VernamCypherTools:
+    @staticmethod
+    def encode_symbol(char: str, key_char: str):
+        return chr((ord(char) + ord(key_char) % 256))
+
+    @staticmethod
+    def decode_symbol(char: str, key_char: str):
+        return chr((ord(char) - ord(key_char) % 256))
+
+    @staticmethod
+    def generate_key(message: str) -> str:
+        """
+        Функция генерации ключа для сообщения
+        :param message: сообщение
+        :return: ключ
+        """
+        key_length = len(message)
+        key = ''
+        for i in range(key_length):
+            key += chr(randint(0, 255))
+        return key
+
+    @staticmethod
+    def encode(message) -> tuple:
+        """
+        Функция шифрования сообщения методом Вернама. Ключ генерируется автоматически
+        :param message: сообщение для шифрования
+        :return: зашифрованное сообщение и ключ
+        """
+        key = VernamCypherTools.generate_key(message)
+        encrypted = ''
+        for i in range(len(message)):
+            encrypted += VernamCypherTools.encode_symbol(message[i], key[i])
+        return encrypted, key
+
+    @staticmethod
+    def decode(encrypted, key):
+        """
+        Функция расшифровки сообщения сетодом Вернама
+        :param encrypted: зашифрованное сообщение
+        :param key: ключ шифрования
+        :return: расшифрованное сообщение
+        """
+        message = ''
+        for i in range(len(encrypted)):
+            message += VernamCypherTools.decode_symbol(encrypted[i], key[i])
+        return message
