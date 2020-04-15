@@ -1,6 +1,5 @@
 import string
 from crypto_constants import LETTER_FREQUENCY
-
 from random import randint
 
 
@@ -29,11 +28,13 @@ class CesarCypherTools:
     @staticmethod
     @lower_arguments
     def encode(message: str, key: int):
+        key = int(key)
         return CesarCypherTools.rotate_text(message, key)
 
     @staticmethod
     @lower_arguments
     def decode(message: str, key: int):
+        key = int(key)
         return CesarCypherTools.rotate_text(message, 26 - key)
 
     @staticmethod
