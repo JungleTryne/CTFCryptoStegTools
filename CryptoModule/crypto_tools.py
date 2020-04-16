@@ -1,5 +1,5 @@
 import string
-from crypto_constants import LETTER_FREQUENCY
+from CryptoModule.crypto_constants import LETTER_FREQUENCY
 from random import randint
 
 

@@ -1,6 +1,6 @@
-from console_constants import HELP_MESSAGE, FILE_NOT_FOUND
-from crypto_tools import CesarCypherTools, VernamCypherTools, VigenereCypherTools
-from console_exceptions import UnknownArgument
+from CryptoModule.console_constants import HELP_MESSAGE, FILE_NOT_FOUND
+from CryptoModule.crypto_tools import CesarCypherTools, VernamCypherTools, VigenereCypherTools
+from CryptoModule.console_exceptions import UnknownArgument
 
 
 def get_text(file_path: str) -> str:
@@ -58,7 +58,9 @@ def handle_request(parameters: list) -> str:
         return HELP_MESSAGE
 
     if is_key_required(function):
-        answer = function(file_text, parameters[3])
+        with open(parameters[3], 'r') as file:
+            key = file.read()
+        answer = function(file_text, key)
         return answer
     else:
         answer = function(file_text)
