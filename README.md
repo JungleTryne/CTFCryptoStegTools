@@ -1,5 +1,7 @@
 # Usage
-```python3 crypto.py [файл с текстом/зашфрованным сообщением].txt [-option1] key.txt
+```bash 
+
+python3 crypto.py [файл с текстом/зашфрованным сообщением].txt [-option1] key.txt
 
 Options:
 1)Шифрование цезарем: -Ce key
