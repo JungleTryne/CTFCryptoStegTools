@@ -23,6 +23,14 @@ def lower_arguments(func):
     return wrapper
 
 
+def to_num(char: str) -> int:
+    return ord(char) - ord('a')
+
+
+def to_char(num: int) -> str:
+    return chr(num + ord('a'))
+
+
 class CesarCypherTools:
     @staticmethod
     @lower_arguments
@@ -46,10 +54,11 @@ class CesarCypherTools:
     @staticmethod
     def rotate_counter(message_counter: dict) -> None:
         values = []
-        for i in range(len(string.ascii_lowercase)):
-            values.append(message_counter[string.ascii_lowercase[i]])
+        for i in string.ascii_lowercase:
+            values.append(message_counter[i])
 
         new_values = values[-1:] + values[:-1]
+
         for i in range(len(string.ascii_lowercase)):
             message_counter[string.ascii_lowercase[i]] = new_values[i]
         pass
@@ -59,7 +68,7 @@ class CesarCypherTools:
         solution = ''
         for char in message:
             if char in string.ascii_lowercase:
-                solution += chr(((ord(char) - ord('a') + key) % 26) + ord('a'))
+                solution += to_char((to_num(char) + key) % 26)
             else:
                 solution += char
         return solution
@@ -104,17 +113,11 @@ class CesarCypherTools:
 class VigenereCypherTools:
     @staticmethod
     def encode_symbol(char: str, key_char: str):
-        return chr(
-            ((ord(char) - ord('a') +
-              ord(key_char) - ord('a')) % 26) + ord('a')
-        )
+        return to_char((to_num(char) + to_num(key_char)) % 26)
 
     @staticmethod
     def decode_symbol(char: str, key_char: str):
-        return chr(
-            ((ord(char) - ord('a') -
-              ord(key_char) + ord('a')) % 26) + ord('a')
-        )
+        return to_char((to_num(char) - to_num(key_char)) % 26)
 
     @staticmethod
     def enlarge_key(message: str, key: str) -> str:

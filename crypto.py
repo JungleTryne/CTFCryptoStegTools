@@ -4,14 +4,16 @@ import sys
 
 def main():
     arguments = sys.argv
-    answer = handler.handle_request(arguments)
-    if isinstance(answer, tuple):
-        with open("output.txt", 'w+') as file:
+    answer, output_file = handler.handle_request(arguments)
+    if output_file is None:
+        print(answer)
+    elif isinstance(answer, tuple):
+        with open("{0}".format(output_file), 'w+') as file:
             file.write(str(answer[0]))
         with open("key.txt", 'w+') as file:
             file.write(str(answer[1]))
     else:
-        with open("output.txt", 'w+') as file:
+        with open("{0}".format(output_file), 'w+') as file:
             file.write(str(answer))
 
 
