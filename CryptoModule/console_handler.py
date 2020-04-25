@@ -4,12 +4,9 @@ from CryptoModule.console_exceptions import UnknownArgument
 
 
 def get_text(file_path: str) -> str:
-    try:
-        with open(file_path, 'r') as file:
-            file_text = file.read()
-            return file_text
-    except:
-        raise FileNotFoundError
+    with open(file_path, 'r') as file:
+        file_text = file.read()
+        return file_text
 
 
 def is_key_required(function) -> bool:
@@ -36,7 +33,7 @@ def get_function(main_argument):
     try:
         function = ways[main_argument]
         return function
-    except:
+    except IndexError:
         raise UnknownArgument
 
 
@@ -44,18 +41,21 @@ def handle_request(parameters: list) -> str:
     try:
         file_path = parameters[1]
         main_argument = parameters[2]
-    except:
-        return HELP_MESSAGE
+    except IndexError:
+        print(HELP_MESSAGE)
+        return ''
 
     try:
         file_text = get_text(file_path)
-    except:
-        return FILE_NOT_FOUND
+    except FileNotFoundError:
+        print(FILE_NOT_FOUND)
+        return ''
 
     try:
         function = get_function(main_argument)
     except UnknownArgument:
-        return HELP_MESSAGE
+        print(HELP_MESSAGE)
+        return ''
 
     if is_key_required(function):
         with open(parameters[3], 'r') as file:

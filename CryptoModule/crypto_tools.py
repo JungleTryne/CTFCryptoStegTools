@@ -11,7 +11,6 @@ def lower_arguments(func):
                 new_args.append(args[i].lower())
             else:
                 new_args.append(args[i])
-        args = tuple(new_args)
         for key in kwargs:
             if isinstance(kwargs[key], str):
                 kwargs[key] = kwargs[key].lower()
@@ -60,7 +59,7 @@ class CesarCypherTools:
         solution = ''
         for char in message:
             if char in string.ascii_lowercase:
-                solution += chr(((ord(char) - 97 + key) % 26) + 97)
+                solution += chr(((ord(char) - ord('a') + key) % 26) + ord('a'))
             else:
                 solution += char
         return solution

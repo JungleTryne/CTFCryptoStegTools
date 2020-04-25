@@ -3,7 +3,7 @@ from PIL import Image
 
 def negative(pixel):
     for i in range(len(pixel)):
-        pixel[i] = 255-pixel[i]
+        pixel[i] = 255 - pixel[i]
     return pixel
 
 
@@ -27,7 +27,7 @@ def only_blue(pixel):
 
 def layer_red(pixel, level=0):
     pixel = only_red(pixel)
-    pixel[0] &= 2**level
+    pixel[0] &= 2 ** level
     pixel[0] *= 255
     return pixel
 
@@ -60,7 +60,6 @@ def edit_image(img, func, level=None):
         img.save('stegano/{0}.png'.format(func.__name__))
     else:
         img.save('stegano/{0}{1}.png'.format(func.__name__, level))
-
 
 
 for i in range(0, 8):
