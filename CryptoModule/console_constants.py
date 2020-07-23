@@ -1,8 +1,4 @@
-# Usage
-```bash 
-
-python3 crypto.py [файл с текстом/зашфрованным сообщением].txt [-option1] key.txt
-
+HELP_MESSAGE = '''Usage: python3 crypto.py file_to_work_with -option [key] [--output output.txt]...
 Options:
 1)Шифрование цезарем: -Ce key
 2)Дешифрование цезарем: -Cd key
@@ -11,4 +7,6 @@ Options:
 5)Дешифрование Виженером -Vd key
 6)Шифрование Вернама: -VVe
 7)Дешифрование Вернама: -VVd key
+'''
 
+FILE_NOT_FOUND = '''Не удалось прочитать файл'''
