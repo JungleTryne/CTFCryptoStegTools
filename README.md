@@ -1,14 +1,14 @@
 # Usage
 ```bash 
 
-python3 crypto.py [файл с текстом/зашфрованным сообщением].txt [-option1] key.txt
+python3 crypto.py [file with text to encrypt or to decrypt].txt [-option1] key.txt
 
 Options:
-1)Шифрование цезарем: -Ce key
-2)Дешифрование цезарем: -Cd key
-3)Взлом цезаря: -Ch
-4)Шифрование Виженером: -Ve key
-5)Дешифрование Виженером -Vd key
-6)Шифрование Вернама: -VVe
-7)Дешифрование Вернама: -VVd key
-
+1)Encrypt using Ceasar cipher: -Ce key
+2)Decrypt Ceasar cipher: -Cd key
+3)Hack ceasar cipher (brutforce): -Ch
+4)Encrypt using Vigenère cipher: -Ve key
+5)Decrypt Vigenère cipher -Vd key
+6)Encrypt using Vernam cipher: -VVe
+7)Decrypt Vernam cipher: -VVd key
+ 
